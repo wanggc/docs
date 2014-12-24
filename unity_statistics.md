@@ -17,6 +17,25 @@ AVClient.Initialize("{{appid}}", "{{appkey}}");
 
 默认是`启动时发送`策略: 应用程序每次会在启动时会向服务器发送一次消息，在应用程序过程中产生的所有统计信息(包括自定义事件和本次使用时长)都会在下次启动时候发送。 如果应用程序启动时处在不联网状态，那么消息将会缓存在本地，下次再尝试发送。
 
+## 发布渠道
+游戏分发的时候，需要手动地进行如下的设置，SDK 在发送统计数据的时候，会帮开发者将发布渠道一并收集并发送至 LeanCloud 服务端，如此做，开发者可以实时的查看每一个分发渠道里面的统计数据，可以进行横向对比：
+
+```
+AVClient.Channel="AppStore";
+```
+
+## 包信息
+因为 Unity 的包信息（Bundle）设置无法在运行时获取，为了解决这个问题，我们设置了几个开放属性：
+
+```
+   public string BundleIdentifier;//包Id，类似于“com.Company.ProductName”
+   
+   public string BundleVersion;//包版本，“1.0”
+   
+   public string BundleDisplayName;//应用名称，比如“超级玛丽”
+``` 
+这些可以通过绑定脚本的方式在 Unity Editor 里面填写。
+
 ##  游戏场景访问统计
 
 使用Unity开发游戏的时候必然会遇到需要统计玩家在各个游戏场景进入的时间，退出的时间等信息，以供开发者提高游戏体验以及优化游戏资源分配的参数，LeanCloud Unity SDK已经提供了这样的方法。

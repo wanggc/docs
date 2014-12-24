@@ -621,6 +621,15 @@ catch(AVException avException)
 {
 }
 ```
+#### 匿名用户登录
+为了支持弱用户概念的应用，LeanCloud 也提供了一套匿名登录的机制，只要调用 `AVUser.LogInAsync` 不传入任何参数，SDK 会默认创建一个用户名随机的匿名用户：
+
+```
+AVUser.LogInAsync().ContinueWith(t=>
+{
+   var user=t.Result;
+});
+```
 
 ### 邮箱认证
 在移动互联时代，任何一个用户信息都是必须在双方统一认证之后才会被视为一种安全机制，比如邮箱的认证，同样，在`AVUser`这个特殊的`AVObject`拥有一个特殊字段`email`，可以在[数据管理](/data.html?appid={{appid}})的`_User`表看到这个默认的字段，这就是在注册是提供的邮箱，当在[应用设置](/app.html?appid={{appid}}#/permission)中勾选了
@@ -1119,6 +1128,17 @@ dic.Add("name", "Justin");
 var callTask = AVCloud.CallFunctionAsync<string>("TestFunctionName", dic);
 ```
 只需要传入云代码中函数的名字和这个函数需要参数即可，如果是无参的函数，直接传入`null`即可。
+
+## 获取自定义参数
+[自定义参数](/devcomponent.html??appid={{appid}}#/component/custom_param)是 LeanCloud 提供的一套全局的变量共享机制，比如开发者想在服务端定一些 Key-Value 的组合供给各个平台共享，比如某些应用会采用定时器的方式去发送一些定量的数据，那么这个定时器的时间周期就可以写在服务端，这样各个平台的 SDK 可以动态的调整发送策略，如下代码：
+
+```
+AVCloud.GetCustomParameters().ContinueWith(t => 
+{
+    var dic = t.Result;
+    var interval = long.Parse(dic["interval"].ToString());
+});
+```
 
 ## 消息推送
 在Unity中消息的推送只需要掌握`AVPush`的用法就可以在客户端推送消息发给服务端，再由 LeanCloud 的服务端将消息都推送各个客户端，但要注意**Unity想实现接受消息，最好依赖于当前操作系统的本地的API**，换言之，因为接受消息这一操作在各个移动操作系统最好使用当前系统的API去实现，当然，开发者也可以自己去实现。考虑到这一点，LeanCloud 暂时不考虑在Unity 做过多的强制性，如何展现消息接受，应该是客户端开发者自己去掌控。另外，我们也推荐在Unity开发中，针对不同平台搭配使用我们针对这个平台的SDK（iOS,Android,Windows Phone等）去调用带有平台特征性的一些功能和API。
