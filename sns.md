@@ -7,7 +7,7 @@ AVOSCloudSNS 是一个非常轻量的模块, 可以用最少一行代码就可�
 ## iOS SNS 组件
 
 ### 导入 SDK
-您可以从 https://github.com/avos/avoscloud-sdk 下载iOS的SDK。您也可以使用Podfile通过cocoapods下载我们的SDK，如:
+您可以从 https://github.com/leancloud/avoscloud-sdk 下载iOS的SDK。您也可以使用Podfile通过cocoapods下载我们的SDK，如:
 
 ```sh
 pod 'AVOSCloudSNS'
@@ -117,15 +117,17 @@ AVOSCloud Android SNS为开发人员提供了一个非常轻量的模块, 使用
 ```
         <activity
             android:name="com.avos.sns.SNSWebActivity" >
-        </activity>        
+        </activity>
 ```
+
+同时你需要拷贝我们准备的res/avoscloud_sns_web_activity.xml到你的项目中去。
 
 之后在你需要授权的地方，你就可以通过WebView进行相应的授权：
 
 ```
    public class AuthActivity extends Activity{
-   
-   public void onCreate(){   
+
+   public void onCreate(){
 
           SNS.setupPlatform(SNSType.AVOSCloudSNSSinaWeibo,
               "登录URL");
@@ -144,7 +146,7 @@ AVOSCloud Android SNS为开发人员提供了一个非常轻量的模块, 使用
             }
           });
    }
-   
+
    @Override
    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
