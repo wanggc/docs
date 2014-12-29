@@ -576,7 +576,7 @@ AVUser.LogInAsync(userName, pwd).ContinueWith(t =>
 详细的代码如下：
 
 ```
-AVUser.LogInByEmail("123@123com","password").ContinueWith(t =>
+AVUser.LogInByEmailAsync("123@123com","password").ContinueWith(t =>
 {
     if (t.IsFaulted || t.IsCanceled)
     {
