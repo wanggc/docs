@@ -5,31 +5,12 @@
 Unity本身支持Mono跨平台的.NET语言的解决方案，所以LeanCloud采用了C#来实现客户端的SDK。如果您有.NET方面的编程经验，您会很容易就掌握LeanCloud Unity SDK接口的风格以及用法。
 
 LeanCloud Unity SDK在很多重要的功能点上采用了微软提供的[基于任务的异步模式 (TAP)](http://msdn.microsoft.com/zh-cn/library/hh873175.aspx)的方式，所以您最好有.NET Framework 4.5的编程经验，或者对.NET Framework 4.5的新API有所了解。
-
-## 快速入门
-
-建议您在阅读本文档之前，阅读我们提供的[快速入门](https://leancloud.cn/start.html)文档，获取 LeanCloud 使用的配置和第一印象。
-
 ## 应用
 在 LeanCloud 的每个应用有自己的 ID 和客户端密钥，在客户端代码中应该用他们来初始化 SDK。
 
 ### 初始化
-在 LeanCloud 中，几乎所有平台下的接口我们都尽量保持一致，目的就是为了降低开发者的开发成本，所以在初始化的时候我们几乎都是遵循在`AVClient`这个类下有一个叫做`Initialize`（不同平台的编程规范可能不一样，但是在 C# 语言风格中一般方法名的首字母都是大写）的方法，这个方法目前有2个重载：
+目前仅仅推荐开发者在 GameObject 上绑定 `AVOSCloudInitializeBehaviour` 的方式进行初始化。
 
-传入您的 `App ID` 以及 `App Key`，默认访问的是 LeanCloud 的中国节点。
-
-```javascript
-  AVClient.Initialize(string applicationId, string appKey);
-```
-
-除了传入您的 `App ID` 以及 `App Key`之外，指定 LeanCloud 的服务节点，现在 AVRegion 仅支持 CN 以及 US 节点。
-
-```javascript
-  AVClient.Initialize(string applicationId, string appKey, AVRegion region);
-```
-注意，目前 LeanCloud 的节点上的数据是相互隔离的，换言之，您在中国节点上注册的应用无法访问美国节点，反之亦然。
-
-LeanCloud 的每一个账户都可以创建多个应用。同一个应用可以分别在测试环境和生产环境部署不同的版本。
 ## 对象
 ### AVObject
 在 LeanCloud 上，数据存储是围绕 `AVObject` 进行的。每个 `AVObject` 都包含了与 JSON 兼容的 key-value 对应的数据。数据是 schema-free 的，你不需要在每个 AVObject 上提前指定存在哪些键，只要直接设定对应的 key-value 即可。
@@ -80,7 +61,7 @@ string playerName = gameScore.Get<string>("playerName");
 ### 在后台工作
 在使用Unity打造一个良好用户体验并且具备实时响应的游戏时，应该遵循最基本的一个原则：不应该在主线程上进行耗时较长的操作，尤其使对于网络访问的操作。这就意味着，您需要在使用后台进程来处理这些操作。
 
-为了使代码简洁优雅，我们在Unity上也实现了与.NET Framework 4.5提出的[基于任务的异步模式 (TAP)](http://msdn.microsoft.com/zh-cn/library/hh873175.aspx)的方式实现异步操作。我们添加了一个`Task`类，一个`Task`代表一个异步的操作。`Task`的典型用法就是从一个方法返回一个`Task`，并且它提供了一个接口可以在在执行`Task`之前就传入了处理`Task`执行结果的方法代理。当一个 `Task` 被返回，说明这个`Task`已经开始执行，这种基于`Task`的编程模型并不等同于多线程编程模型：它仅仅代表着这一项操作正在执行，并没有告知它在哪个线程里面被执行。
+为了使代码简洁优雅，我们在 Unity 上也实现了与.NET Framework 4.5提出的[基于任务的异步模式 (TAP)](http://msdn.microsoft.com/zh-cn/library/hh873175.aspx)的方式实现异步操作。我们添加了一个 `Task` 类，一个 `Task` 代表一个异步的操作。`Task` 的典型用法就是从一个方法返回一个 `Task`，并且它提供了一个接口可以在在执行 `Task` 之前就传入了处理 `Task` 执行结果的方法代理。当一个 `Task` 被返回，说明这个 `Task` 已经开始执行，这种基于`Task`的编程模型并不等同于多线程编程模型：它仅仅代表着这一项操作正在执行，并没有告知它在哪个线程里面被执行。
 
 [基于任务的异步模式 (TAP)](http://msdn.microsoft.com/zh-cn/library/hh873175.aspx)的编程模式相对于回调模型以及事件模型都有很多优势之处，具体还需要开发者对TAP编程模型有更深入了解。
 
@@ -510,10 +491,10 @@ query.FindAsync().ContinueWith(t =>
 ```
 
 ## 用户
-游戏中的用户既是游戏本身的玩家也是带有统计意义和社交意义的载体。例如，在游戏中最基本关于用户的应用场景就是用户所获得分数以及排名，LeanCloud已经在SDK中内嵌了关于用户这个较为特殊的对象的一些最基本的操作和数据服务。
+游戏中的用户既是游戏本身的玩家也是带有统计意义和社交意义的载体。例如，在游戏中最基本关于用户的应用场景就是用户所获得分数以及排名，LeanCloud 已经在 SDK 中内嵌了关于用户这个较为特殊的对象的一些最基本的操作和数据服务。
 
 ### 注册
-注册用户在LeanCloud SDK中极为简单，看如下实例代码：
+注册用户在 LeanCloud SDK 中极为简单，看如下实例代码：
 
 ```javascript
 var userName = "demoUser";
@@ -583,6 +564,32 @@ AVUser.LogInAsync(userName, pwd).ContinueWith(t =>
     }
 });
 ```
+
+#### 邮箱和密码登陆
+类似于 [Github](https://github.com) ，很多应用同时支持邮箱和用户名搭配密码进行登陆验证的，同样 LeanCloud 为了满足这种需求，也同时支持了邮箱搭配密码进行登录，值得注意的是如果当前应用在控制台中勾选了
+
+```
+启用注册用户邮箱验证
+禁止未验证邮箱用户登录
+```
+以上2项，那么只有通过邮箱验之后的那些用户才可以使用邮箱和密码匹配登录的接口，否则服务端会返回登陆错误的信息。
+详细的代码如下：
+
+```
+AVUser.LogInByEmail("123@123com","password").ContinueWith(t =>
+{
+    if (t.IsFaulted || t.IsCanceled)
+    {
+       var error = t.Exception.Message; // 登陆失败，可以查看错误信息。
+    }
+    else
+    {
+       //登陆成功
+    }
+});
+```
+另外，需要说明的是，邮箱地址在本地并没有校验邮箱格式。
+
 #### 手机号和密码登陆
 在短信服务上线之后，只要是`通过认证`的手机号可以当做用户名在 LeanCloud 服务端进行登陆，自然SDK里面也加入了相应的支持(Unity SDK 自V1.1.0以及以后的版本都有支持)。它的调用与用户名登陆一样，只是方法名字不一样，代码如下:
 
@@ -705,9 +712,9 @@ public void RequestSMSCodeWithCustomParameters()
 以上是调用发送，下一步就是验证。
 
 ```javascript
-public void VerifySMSCode(string code)
+public void VerifySMSCode(string code,string mobilePhoneNumber)
 {
-	var task=AVCloud.VerifySmsCode (code).ContinueWith(t=>
+	var task=AVCloud.VerifySmsCode (code,mobilePhoneNumber).ContinueWith(t=>
 	{
 		if(t.Result)
 		{
@@ -722,7 +729,7 @@ public void VerifySMSCode(string code)
 ```
 
 ### 当前用户
-诚如所有移动应用一样当前用户一直是被在客户端视作持久化存储处理，比如手机QQ等流行的App，LeanCloud必然也会如此为开发者解决持久化存储当前用户，只要调用了`登陆`相关的接口，当前用户就会被持久化存储在客户端。
+诚如所有移动应用一样当前用户一直是被在客户端视作持久化存储处理，比如手机QQ等流行的App，LeanCloud 必然也会如此为开发者解决持久化存储当前用户，只要调用了`登陆`相关的接口，当前用户就会被持久化存储在客户端（用户一旦注销登录或者卸载了应用该持久化数据随即被删除。）
 
 ```javascript
 var user = AVUser.CurrentUser;
