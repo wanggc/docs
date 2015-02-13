@@ -2539,6 +2539,10 @@ metrics参数可选项解释：
   <tr><td>avg_session_time</td><td>日次均使用时长</td></tr>
   <tr><td>avg_page_count</td><td>日均访问页面数</td></tr>
   <tr><td>retention_n</td><td>n天后的存留用户数 (n可取值：1-7,14,30 如 retention_1)</td></tr>
+  <tr><td>lost_user_7</td><td>7日不活跃流失用户数</td></tr>
+  <tr><td>lost_user_14</td><td>14日不活跃流失用户数</td></tr>
+  <tr><td>lost_user_rate_7</td><td>7日不活跃用户流失率</td></tr>
+  <tr><td>lost_user_rate_14</td><td>14日不活跃用户流失率</td></tr>
   <tr><td>push_login</td><td>推送用户数</td></tr>
   <tr><td>push_ack</td><td>推送到达数</td></tr>
   <tr><td>push_session</td><td>聊天用户数</td></tr>
